@@ -1,0 +1,32 @@
+{
+  "name": "cloud-trail-hipchat-lambda",
+  "version": "0.1.1",
+  "description": "A nodejs CloudTrail parser that sends events to a HipChat room.",
+  "author": "Jonathan Cole <jcole@axs.com>",
+  "contributors": [{ "name": "Jonathan Cole", "email": "jcole@axs.com" }],
+  "scripts": {
+    "start": "node index.js",
+    "zip": "rm cloudtrail.zip ; zip -r cloudtrail.zip cloudtrail.js filter_config.js node_modules -x node_modules/aws-sdk"
+  },
+  "main": "cloudtrail.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solud/cloud-trail-hipchat-lambda"
+  },
+  "bugs": {
+    "url": "https://github.com/solud/cloud-trail-hipchat-lambda/issues"
+  },
+  "keywords": [
+    "hipchat",
+    "cloudtrail",
+    "lambda",
+    "solud"
+  ],
+  "dependencies": {
+    "node-hipchat": "*",
+    "q": "*"
+  },
+  "preferGlobal": false,
+  "private": false,
+  "license": "MIT"
+}
