@@ -8,9 +8,7 @@ var hipchat = require('node-hipchat');
 var HC = new hipchat(FILTER_CONFIG.apiAuthToken);
 
 function init() {
-   console.log("debug: init 1")
    var deferred = Q.defer();
-   console.log('Config : %j', FILTER_CONFIG);
    deferred.resolve(FILTER_CONFIG);
    return deferred.promise;
 }
@@ -36,7 +34,6 @@ function download(bucket, key) {
 
   // extract file name from key name
   var fileName = key.match(/.*\/(.*).json.gz$/)[1]
-  console.log("RegExp file name = " + fileName);
   var file     = fs.createWriteStream('/tmp/' + fileName + '.json.gz');
 
   // pipe from S3 to local file
@@ -112,16 +109,15 @@ function notify(records) {
   for (var i = 0; i < records.length; i++) {
     if (records[i].eventName.match(new RegExp(FILTER_CONFIG.regexp)) || records[i].errorCode != undefined) {
       var message = "<span>" + records[i].eventTime.replace(/.*T/, ' ').replace(/Z/, ' ').replace(/\..+/, '') + "</span> :: " +
-      "<span>Event: <b>" + records[i].eventName + "</b></span>" + spacer +
-      "<span>Region: <b>" + records[i].awsRegion + "</b></span>" + spacer +
-      "<span>Address: <b>" + records[i].sourceIPAddress + "</b></span>" + spacer +
-      "<span>User: <b>" + records[i].userIdentity.userName + "</b></span><br>" +
-      "<span>Agent: <b>" + records[i].userAgent + "</b></span>" + spacer +
-      "<span>Source: " + records[i].eventSource + "</span>" + spacer +
-      "<span><b>Params</b>: " + JSON.stringify(records[i].requestParameters, null, '') + "</span><br>" +
-      (records[i].errorCode != undefined ? "<span>Error: <b>" + records[i].errorCode + "</b> | " + records[i].errorMessage : '') + "</span><br>"
-      console.log(message)
-      console.log('Sending notification #' + i + 1)
+        "<span>Event: <b>" + records[i].eventName + "</b></span>" + spacer +
+        "<span>Region: <b>" + records[i].awsRegion + "</b></span>" + spacer +
+        "<span>Address: <b>" + records[i].sourceIPAddress + "</b></span>" + spacer +
+        "<span>User: <b>" + records[i].userIdentity.userName + "</b></span><br>" +
+        "<span>Agent: <b>" + records[i].userAgent + "</b></span>" + spacer +
+        "<span>Source: " + records[i].eventSource + "</span>" +
+        (records[i].requestParameters != undefined ? spacer + "<span><b>Params</b>: " + JSON.stringify(records[i].requestParameters, null, '') + "</span>" : '') +
+        (records[i].errorCode != undefined ? "<br><span>Error: <b>" + records[i].errorCode + "</b> · " + records[i].errorMessage + "</span>" : '')
+      console.log('Sending notification for record #' + i + 1)
       var task = sendNotification(message, FILTER_CONFIG.roomId, 'AXS Bot');
       deferredTasks.push(task);
     }

@@ -6,7 +6,7 @@
   "contributors": [{ "name": "Jonathan Cole", "email": "jcole@axs.com" }],
   "scripts": {
     "start": "node index.js",
-    "zip": "rm cloudtrail.zip ; zip -r cloudtrail.zip cloudtrail.js filter_config.js node_modules -x node_modules/aws-sdk"
+    "zip": "rm cloudtrail.zip ; zip -r cloudtrail.zip cloudtrail.js filter_config.js node_modules/node-hipchat node_modules/q"
   },
   "main": "cloudtrail.js",
   "repository": {
